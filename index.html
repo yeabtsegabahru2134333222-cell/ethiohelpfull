@@ -8,18 +8,19 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
   <div class="app">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <aside class="sidebar" role="complementary">
       <div class="brand">
-        <div class="logo">E</div>
+        <div class="logo" aria-hidden="true">E</div>
         <div class="brand-text">
           <strong>Ethiohelpful</strong>
           <span>Find your starting point</span>
         </div>
       </div>
 
-      <nav class="nav">
+      <nav class="nav" role="navigation" aria-label="Primary navigation">
         <button class="nav-btn active" data-view="dashboard">
           <span class="nav-icon">⌂</span>
           <span>Dashboard</span>
@@ -55,13 +56,16 @@
     </aside>
 
     <!-- Main content -->
-    <main class="main">
+    <main id="main-content" class="main" role="main">
       <header class="topbar">
         <div>
           <p class="eyebrow" id="page-eyebrow">YOUR SPACE</p>
           <h1 id="page-title">Welcome</h1>
         </div>
-        <button class="btn-ghost" id="edit-profile-btn">Edit profile</button>
+        <div class="topbar-actions">
+          <button class="btn-ghost" id="edit-profile-btn">Edit profile</button>
+          <button class="btn-ghost" id="theme-toggle" aria-pressed="false" aria-label="Toggle dark mode">🌙</button>
+        </div>
       </header>
 
       <!-- DASHBOARD -->
@@ -76,7 +80,7 @@
               <button class="btn-secondary" data-view-target="paths">Browse path ideas</button>
             </div>
           </div>
-          <div class="hero-visual">
+          <div class="hero-visual" aria-hidden="true">
             <div class="orbit">
               <div class="ring"></div>
               <div class="ring ring-2"></div>
@@ -143,7 +147,7 @@
               </div>
             </div>
             <div class="messages" id="messages">
-              <div class="bubble ai">Hi. I’m here to help you think through your next steps as a high-school student in Ethiopia. Tell me what’s on your mind, or complete your profile first so I can be more useful.</div>
+              <div class="bubble ai">Hi. I’m here to help you think through your next steps as a high-school student in Ethiopia. Tell me what’s on your mind, or complete your profile first s[...]
             </div>
             <div class="quick-prompts" id="quick-prompts">
               <button data-prompt="I don’t know where to start.">I don’t know where to start</button>
@@ -263,9 +267,9 @@
   </div>
 
   <!-- Modals -->
-  <div class="modal hidden" id="milestone-modal">
+  <div class="modal hidden" id="milestone-modal" role="dialog" aria-modal="true">
     <div class="modal-box">
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" data-close aria-label="Close modal">&times;</button>
       <p class="eyebrow">ROADMAP</p>
       <h2>Add a milestone</h2>
       <form id="milestone-form">
@@ -285,9 +289,9 @@
     </div>
   </div>
 
-  <div class="modal hidden" id="experiment-modal">
+  <div class="modal hidden" id="experiment-modal" role="dialog" aria-modal="true">
     <div class="modal-box">
-      <button class="modal-close" data-close>&times;</button>
+      <button class="modal-close" data-close aria-label="Close modal">&times;</button>
       <p class="eyebrow">EXPLORATION</p>
       <h2>Record something you tried</h2>
       <form id="experiment-form">

@@ -400,5 +400,30 @@ qsa("[data-prompt]").forEach(b => {
   };
 });
 
+/* ========== Theme toggle ========== */
+const THEME_KEY = "ethiohelpful_theme";
+const themeBtn = qs("#theme-toggle");
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  themeBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+  themeBtn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+}
+
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+  applyTheme(saved || (prefersDark ? "dark" : "light"));
+}
+
+themeBtn.onclick = () => {
+  const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+  const next = current === "dark" ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+};
+
+initTheme();
+
 /* Init */
 renderAll();

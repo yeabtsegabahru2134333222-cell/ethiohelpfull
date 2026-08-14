@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ethiohelpful — Find Your Starting Point</title>
+  <meta name="description" content="Free, honest guidance for Ethiopian high-school students. Explore realistic paths, build a roadmap, and decide your next step." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">E</div>
+        <div class="brand-text">
+          <strong>Ethiohelpful</strong>
+          <span>Find your starting point</span>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="nav-btn active" data-view="dashboard">
+          <span class="nav-icon">⌂</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-btn" data-view="guide">
+          <span class="nav-icon">✦</span>
+          <span>AI Guide</span>
+        </button>
+        <button class="nav-btn" data-view="roadmap">
+          <span class="nav-icon">↗</span>
+          <span>Roadmap</span>
+        </button>
+        <button class="nav-btn" data-view="paths">
+          <span class="nav-icon">◎</span>
+          <span>Path ideas</span>
+        </button>
+        <button class="nav-btn" data-view="profile">
+          <span class="nav-icon">☺</span>
+          <span>My profile</span>
+        </button>
+        <button class="nav-btn" data-view="journal">
+          <span class="nav-icon">▤</span>
+          <span>Exploration</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="disclaimer">
+          <strong>AI can make mistakes</strong>
+          <p>Always verify requirements, deadlines, costs, and official information with schools, exam boards, or trusted sources.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="page-eyebrow">YOUR SPACE</p>
+          <h1 id="page-title">Welcome</h1>
+        </div>
+        <button class="btn-ghost" id="edit-profile-btn">Edit profile</button>
+      </header>
+
+      <!-- DASHBOARD -->
+      <section id="dashboard" class="view active">
+        <div class="hero">
+          <div class="hero-content">
+            <p class="eyebrow light">START WHERE YOU ARE</p>
+            <h2>You don’t need your whole future figured out.</h2>
+            <p>Ethiohelpful helps Ethiopian high-school students explore realistic directions, understand trade-offs, and decide the next useful step — without pressure or false promises.</p>
+            <div class="hero-actions">
+              <button class="btn-primary" data-open-guide>Talk to the AI guide →</button>
+              <button class="btn-secondary" data-view-target="paths">Browse path ideas</button>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="orbit">
+              <div class="ring"></div>
+              <div class="ring ring-2"></div>
+              <div class="core">E</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <article class="stat-card">
+            <div class="stat-label">YOUR PROFILE</div>
+            <h3 id="dash-name">Not set yet</h3>
+            <p id="dash-summary">Add a few details so guidance can be more relevant to you.</p>
+            <div class="chips" id="dash-chips"></div>
+            <button class="link-btn" data-view-target="profile">Complete profile →</button>
+          </article>
+          <article class="stat-card">
+            <div class="stat-label">CURRENT FOCUS</div>
+            <h3 id="dash-focus-title">Find your direction</h3>
+            <p id="dash-focus-text">Start with what you already know. Direction can change as you learn more.</p>
+            <button class="link-btn" data-open-guide>Explore with AI →</button>
+          </article>
+          <article class="stat-card">
+            <div class="stat-label">PROGRESS</div>
+            <div class="progress-row">
+              <span id="dash-progress-pct">0%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="dash-progress-fill"></div></div>
+            <p id="dash-progress-text">No milestones yet.</p>
+            <button class="link-btn" data-view-target="roadmap">Open roadmap →</button>
+          </article>
+        </div>
+
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">YOUR JOURNEY</p>
+            <h2>Roadmap snapshot</h2>
+          </div>
+          <button class="link-btn" data-view-target="roadmap">View full roadmap →</button>
+        </div>
+        <div class="snapshot card" id="timeline-snapshot"></div>
+      </section>
+
+      <!-- AI GUIDE -->
+      <section id="guide" class="view">
+        <div class="guide-layout">
+          <div class="guide-intro">
+            <p class="eyebrow">AI GUIDE</p>
+            <h2>Let’s figure out where to start.</h2>
+            <p>The guide works from the information you give it. It won’t force a career or promise success. It will help you think clearly about options and next steps.</p>
+            <div class="principles">
+              <div class="principle"><span>01</span> Use your real data, not assumptions</div>
+              <div class="principle"><span>02</span> Be honest about obstacles and constraints</div>
+              <div class="principle"><span>03</span> Keep the final decision with you</div>
+            </div>
+          </div>
+
+          <div class="chat card">
+            <div class="chat-header">
+              <div class="avatar">✦</div>
+              <div>
+                <strong>Ethiohelpful Guide</strong>
+                <span>Honest · practical · no pressure</span>
+              </div>
+            </div>
+            <div class="messages" id="messages">
+              <div class="bubble ai">Hi. I’m here to help you think through your next steps as a high-school student in Ethiopia. Tell me what’s on your mind, or complete your profile first so I can be more useful.</div>
+            </div>
+            <div class="quick-prompts" id="quick-prompts">
+              <button data-prompt="I don’t know where to start.">I don’t know where to start</button>
+              <button data-prompt="Help me explore my interests.">Explore my interests</button>
+              <button data-prompt="I want to study abroad.">I want to study abroad</button>
+              <button data-prompt="What should I do in Grade 11 or 12?">Grade 11 / 12 advice</button>
+            </div>
+            <form class="chat-form" id="chat-form">
+              <input id="chat-input" type="text" placeholder="What’s on your mind?" autocomplete="off" />
+              <button type="submit" class="btn-primary">Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROADMAP -->
+      <section id="roadmap" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">LONG-TERM DIRECTION</p>
+            <h2>Your roadmap</h2>
+            <p class="sub">Direction, not a guarantee. Change it whenever your goals change.</p>
+          </div>
+          <button class="btn-primary" id="add-milestone">+ Add milestone</button>
+        </div>
+        <div class="roadmap-list card" id="roadmap-list"></div>
+      </section>
+
+      <!-- PATH IDEAS -->
+      <section id="paths" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">EXPLORE OPTIONS</p>
+            <h2>Path ideas</h2>
+            <p class="sub">These are starting points, not fixed destinies. Use them to spark exploration.</p>
+          </div>
+        </div>
+        <div class="paths-grid" id="paths-grid"></div>
+      </section>
+
+      <!-- PROFILE -->
+      <section id="profile" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">ABOUT YOU</p>
+            <h2>Your profile</h2>
+            <p class="sub">The guide can only be as useful as the information you choose to share.</p>
+          </div>
+        </div>
+        <form class="profile-form card" id="profile-form">
+          <div class="form-grid">
+            <label>Name (optional)
+              <input name="name" placeholder="What should we call you?" />
+            </label>
+            <label>Grade
+              <select name="grade">
+                <option value="">Select grade</option>
+                <option>Grade 9</option>
+                <option>Grade 10</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+                <option>Just finished Grade 12</option>
+              </select>
+            </label>
+            <label>Location
+              <input name="location" placeholder="e.g. Addis Ababa, Hawassa, Mekelle..." />
+            </label>
+            <label>Preferred route
+              <select name="route">
+                <option value="">Not sure yet</option>
+                <option>Stay in Ethiopia</option>
+                <option>Study abroad</option>
+                <option>Open to both</option>
+              </select>
+            </label>
+            <label class="full">Interests
+              <textarea name="interests" placeholder="Subjects, activities, topics you enjoy or want to explore..."></textarea>
+            </label>
+            <label class="full">Strengths
+              <textarea name="strengths" placeholder="Things you’re good at or feel confident doing..."></textarea>
+            </label>
+            <label class="full">What’s unclear or worrying you?
+              <textarea name="concerns" placeholder="What feels stuck or uncertain right now?"></textarea>
+            </label>
+            <label>Financial situation
+              <select name="finance">
+                <option value="">Prefer not to say</option>
+                <option>Need significant financial aid / scholarships</option>
+                <option>Need some support</option>
+                <option>Some flexibility</option>
+              </select>
+            </label>
+            <label>Current goal
+              <input name="goal" placeholder="What are you hoping to figure out?" />
+            </label>
+          </div>
+          <div class="form-actions">
+            <span id="save-status"></span>
+            <button type="submit" class="btn-primary">Save profile</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- JOURNAL / EXPLORATION -->
+      <section id="journal" class="view">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">LEARN BY DOING</p>
+            <h2>Exploration history</h2>
+            <p class="sub">Try small things within reach. What you learn about yourself becomes useful data.</p>
+          </div>
+          <button class="btn-primary" id="add-experiment">+ Add experiment</button>
+        </div>
+        <div class="journal-grid" id="journal-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modals -->
+  <div class="modal hidden" id="milestone-modal">
+    <div class="modal-box">
+      <button class="modal-close" data-close>&times;</button>
+      <p class="eyebrow">ROADMAP</p>
+      <h2>Add a milestone</h2>
+      <form id="milestone-form">
+        <label>Milestone title
+          <input name="title" required placeholder="e.g. Research three engineering fields" />
+        </label>
+        <label>Stage
+          <select name="stage">
+            <option>Explore</option>
+            <option>Develop</option>
+            <option>Prepare</option>
+            <option>Next stage</option>
+          </select>
+        </label>
+        <button type="submit" class="btn-primary">Add milestone</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="experiment-modal">
+    <div class="modal-box">
+      <button class="modal-close" data-close>&times;</button>
+      <p class="eyebrow">EXPLORATION</p>
+      <h2>Record something you tried</h2>
+      <form id="experiment-form">
+        <label>What did you try?
+          <input name="title" required placeholder="e.g. Built a small website, shadowed a relative..." />
+        </label>
+        <label>What did you learn about yourself?
+          <textarea name="learning" required placeholder="What did you notice about your interests, energy, or skills?"></textarea>
+        </label>
+        <button type="submit" class="btn-primary">Save exploration</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

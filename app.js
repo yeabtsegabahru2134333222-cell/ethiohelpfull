@@ -221,49 +221,89 @@ const PATHS = [
     tag: "STEM",
     title: "Engineering & Technology",
     desc: "Build, design, and solve practical problems. Strong math and physics help.",
-    steps: ["Strengthen math & physics this year", "Try a small coding or electronics project", "Research local engineering programs (AAU, ASTU, etc.)", "Look into competitive scholarships early"]
+    steps: [
+      "Strengthen math & physics this year",
+      "Try a small coding or electronics project",
+      "Research local engineering programs (AAU, ASTU, etc.)",
+      "Look into competitive scholarships early"
+    ]
   },
   {
     tag: "Health",
     title: "Medicine & Health Sciences",
     desc: "High competition. Requires excellent grades and long-term commitment.",
-    steps: ["Focus heavily on biology & chemistry", "Understand entrance requirements early", "Talk to medical students or doctors if possible", "Have a backup plan (nursing, lab tech, public health)"]
+    steps: [
+      "Focus heavily on biology & chemistry",
+      "Understand entrance requirements early",
+      "Talk to medical students or doctors if possible",
+      "Have a practical backup plan (nursing, lab tech, public health)"
+    ]
   },
   {
     tag: "Business",
     title: "Business, Economics & Finance",
     desc: "Useful in almost every sector. Mix of analysis and people skills.",
-    steps: ["Improve math and English", "Read basic economics or business news", "Try a small trading or project idea", "Explore local universities and private colleges"]
+    steps: [
+      "Improve math and English",
+      "Read basic economics or business news",
+      "Try a small trading or project idea",
+      "Explore local universities and private colleges"
+    ]
   },
   {
     tag: "Tech",
     title: "Computer Science & IT",
     desc: "Growing demand. You can start learning skills before university.",
-    steps: ["Learn basic programming (Python or web)", "Build 1–2 small projects you can show", "Practice English for technical reading", "Research CS programs and online certifications"]
+    steps: [
+      "Learn basic programming (Python or web)",
+      "Build 1–2 small projects you can show",
+      "Practice English for technical reading",
+      "Research CS programs and online certifications"
+    ]
   },
   {
     tag: "Social",
     title: "Law, Social Sciences & Education",
     desc: "Strong writing, reading, and critical thinking matter more than pure STEM scores.",
-    steps: ["Read widely and write regularly", "Practice clear argument and analysis", "Research entrance requirements for law/education", "Consider volunteering or teaching practice"]
+    steps: [
+      "Read widely and write regularly",
+      "Practice clear argument and analysis",
+      "Research entrance requirements for law/education",
+      "Consider volunteering or teaching practice"
+    ]
   },
   {
     tag: "Creative",
     title: "Design, Media & Creative Fields",
     desc: "Portfolio and real work often matter as much as grades.",
-    steps: ["Start building a simple portfolio now", "Learn free design or video tools", "Study both creative skill and basic business", "Look at local creative industries and freelancing"]
+    steps: [
+      "Start building a simple portfolio now",
+      "Learn free design or video tools",
+      "Study both creative skill and basic business",
+      "Look at local creative industries and freelancing"
+    ]
   },
   {
     tag: "Abroad",
     title: "Study Abroad Path",
     desc: "Possible but requires early planning, strong academics, and usually funding.",
-    steps: ["Research countries & requirements 1–2 years ahead", "Improve English (IELTS/TOEFL if needed)", "Track scholarships (government, university, private)", "Prepare a realistic budget and timeline"]
+    steps: [
+      "Research countries & requirements 1–2 years ahead",
+      "Improve English (IELTS/TOEFL if needed)",
+      "Track scholarships (government, university, private)",
+      "Prepare a realistic budget and timeline"
+    ]
   },
   {
     tag: "Local",
     title: "Strong Local University Path",
     desc: "Many excellent options inside Ethiopia. Focus on grades and clear priorities.",
-    steps: ["Know the national exam and placement system", "Rank your preferred departments honestly", "Visit or research campuses if possible", "Build skills that help after graduation"]
+    steps: [
+      "Know the national exam and placement system",
+      "Rank your preferred departments honestly",
+      "Visit or research campuses if possible",
+      "Build skills that help after graduation"
+    ]
   }
 ];
 
@@ -349,7 +389,7 @@ function guideReply(input) {
 
   // Empty
   if (!low || low.length < 2) {
-    return "What’s on your mind? Interests, confusion about the future, grades, studying abroad, money, or just “I don’t know where to start” — any of that works.";
+    return "What’s on your mind? Interests, confusion about the future, grades, studying abroad, money, or just 'I don’t know where to start' — any of that works.";
   }
 
   // Simple greetings
@@ -369,13 +409,13 @@ function guideReply(input) {
     if (p.finance && p.finance.toLowerCase().includes("significant")) {
       reply += "Since funding looks important for you, treat scholarships as a main track and keep strong local options open. ";
     }
-    reply += "Useful moves: research countries/programs 1–2 years ahead, strengthen English and grades, track scholarship deadlines, and always keep a solid Ethiopia backup. Want to dig into one country or scholarships?";
+    reply += "Useful moves: research countries and programs 1–2 years ahead, strengthen English and grades, track scholarship deadlines, and always keep a solid Ethiopia backup. Want to dig into one country or scholarships?";
     return reply;
   }
 
   // Grade 11 / 12 / exams
   if (low.includes("grade 11") || low.includes("grade 12") || low.includes("national exam") || low.includes("entrance") || low.includes("matric") || low.includes("placement")) {
-    return "In Grade 11–12 the practical focus is usually: strong subject performance, understanding the national exam and placement system, and narrowing to 2–3 realistic directions (not one single perfect path).";
+    return "In Grade 11–12 the practical focus is usually: strong subject performance, understanding the national exam and placement system, and narrowing to 2–3 realistic directions rather than one perfect path.";
   }
 
   // Don’t know / stuck / confused
@@ -384,7 +424,7 @@ function guideReply(input) {
       const bits = [];
       if (p.grade) bits.push(`you’re in ${p.grade}`);
       if (p.interests) bits.push(`you’ve mentioned interest in ${p.interests}`);
-      if (p.concerns) bits.push(`and you’re unsure about “${p.concerns}”`);
+      if (p.concerns) bits.push(`and you’re unsure about '${p.concerns}'`);
       const ctx = bits.length ? "Given that " + bits.join(", ") + " — " : "";
       return ctx + "You don’t need the whole future decided. Pick one small next action: browse Path ideas, try a tiny experiment related to something you’re curious about, or add one milestone to your roadmap.";
     }
@@ -394,20 +434,20 @@ function guideReply(input) {
   // Interests / what to study
   if (low.includes("interest") || low.includes("explore") || low.includes("what should i study") || low.includes("which field") || low.includes("what to study") || low.includes("career")) {
     if (p.interests) {
-      return `You mentioned interest in “${p.interests}”. Next useful step: pick one small experiment (short project, conversation with someone in that area, or focused reading). Then notice what you enjoy.`;
+      return `You mentioned interest in '${p.interests}'. Next useful step: pick one small experiment (short project, conversation with someone in that area, or focused reading). Then notice what you enjoy.`;
     }
     return "Start rough: name 2–3 subjects, activities, or problems you don’t mind spending time on. Then look at Path ideas and see what overlaps. You can also just tell me one thing you like and I'll suggest a small test.";
   }
 
   // Money / scholarships
   if (low.includes("money") || low.includes("financial") || low.includes("scholarship") || low.includes("afford") || low.includes("cost") || low.includes("fee") || low.includes("expensive")) {
-    return "Money is a real constraint for a lot of students. Treat it as information, not a dead end. Practical angles: public universities in Ethiopia, early scholarship research (local + international), and short-term skills you can develop with free resources.";
+    return "Money is a real constraint for a lot of students. Treat it as information, not a dead end. Practical angles: public universities in Ethiopia, early scholarship research (local and international), and short-term skills you can develop with free resources.";
   }
 
   // Goals / plan / roadmap
   if (low.includes("goal") || low.includes("plan") || low.includes("roadmap") || low.includes("next step") || low.includes("what next")) {
     if (p.goal) {
-      return `Your current stated goal is “${p.goal}”. Treat it as a working hypothesis, not a permanent contract. Break it into stages (Explore → Develop → Prepare → Next). You can add milestones and adjust them as you learn.`;
+      return `Your current stated goal is '${p.goal}'. Treat it as a working hypothesis, not a permanent contract. Break it into stages (Explore → Develop → Prepare → Next). You can add milestones and adjust them as you learn.`;
     }
     return "A useful plan is usually smaller than people think. Try: one direction to explore this month, one skill or subject to strengthen, and one concrete information gap to close (requirements, costs, or deadlines).";
   }
@@ -415,9 +455,9 @@ function guideReply(input) {
   // Strengths
   if (low.includes("strength") || low.includes("good at") || low.includes("skill") || low.includes("talent")) {
     if (p.strengths) {
-      return `You listed strengths around: ${p.strengths}. Useful question: which of those do you actually enjoy using, not just perform okay at? Enjoyment + ability is a better signal than ability alone.`;
+      return `You listed strengths around: ${p.strengths}. Useful question: which of those do you actually enjoy using, not just perform okay at? Enjoyment plus ability is a better signal than ability alone.`;
     }
-    return "List 3–5 things you do better than average or that people ask you for help with. Then notice which ones give you energy. That mix is more useful than a generic “what should I become”.";
+    return "List 3–5 things you do better than average or that people ask you for help with. Then notice which ones give you energy. That mix is more useful than a generic 'what should I become'.";
   }
 
   // Profile / about me
@@ -442,12 +482,12 @@ function guideReply(input) {
 
   // Fallback — still try to be useful and human
   if (name) {
-    return `Got it, ${name}. I can work with that. Tell me a bit more about what you’re trying to figure out (a field, a worry, a decision, or even “I’m just stuck”) and I’ll help you think it through.`;
+    return `Got it, ${name}. I can work with that. Tell me a bit more about what you’re trying to figure out (a field, a worry, a decision, or even 'I’m just stuck') and I’ll help you think it through.`;
   }
   if (hasContext && p.interests) {
     return `Okay. Given your interest in ${p.interests}, the useful move is usually to test it with a small action rather than only thinking about it. Want ideas for a quick experiment, or do you want to update your profile?`;
   }
-  return "I’m with you. Give me a bit more to work with — a subject you like, something that worries you, a path you’re considering, or just “help me start” — and I’ll respond from there.";
+  return "I’m with you. Give me a bit more to work with — a subject you like, something that worries you, a path you’re considering, or just 'help me start' — and I’ll respond from there.";
 }
 
 qs("#chat-form").onsubmit = e => {

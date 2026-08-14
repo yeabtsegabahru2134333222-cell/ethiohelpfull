@@ -1,4 +1,5 @@
 const KEY = "ethiohelpful_v2";
+const THEME_KEY = "ethiohelpful_theme";
 
 const defaultState = {
   profile: {
@@ -33,9 +34,75 @@ const qs = s => document.querySelector(s);
 const qsa = s => [...document.querySelectorAll(s)];
 
 function escapeHtml(str) {
-  return String(str || "").replace(/[&<>"']/g, c =>
+  return String(str || "").replace(/[&<>\"']/g, c =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[c])
   );
+}
+
+/* ========== Theme (light / dark) ========== */
+function getSavedTheme() {
+  return localStorage.getItem(THEME_KEY); // 'dark' | 'light' | null
+}
+
+function saveTheme(value) {
+  if (value === null) localStorage.removeItem(THEME_KEY);
+  else localStorage.setItem(THEME_KEY, value);
+}
+
+function systemPrefersDark() {
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+function applyTheme(theme) {
+  // theme: 'dark' | 'light' | null (null = follow system)
+  const html = document.documentElement;
+  html.classList.remove('dark', 'light');
+  if (theme === 'dark') html.classList.add('dark');
+  else if (theme === 'light') html.classList.add('light');
+
+  // Update toggle button state if present
+  const btn = qs('#theme-toggle');
+  if (btn) {
+    const pressed = theme === 'dark' || (theme === null && systemPrefersDark());
+    btn.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    btn.textContent = pressed ? '☀️' : '🌙';
+  }
+}
+
+function initTheme() {
+  const saved = getSavedTheme();
+  if (saved === 'dark' || saved === 'light') {
+    applyTheme(saved);
+  } else {
+    // Follow system preference
+    applyTheme(null);
+  }
+
+  // Update when system preference changes (only when user hasn't explicitly chosen)
+  if (window.matchMedia) {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    mq.addEventListener && mq.addEventListener('change', e => {
+      if (!getSavedTheme()) applyTheme(null);
+    });
+  }
+
+  // Attach click handler
+  const btn = qs('#theme-toggle');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      // Toggle between dark and light; if currently following system, use system as base
+      const cur = getSavedTheme();
+      let next;
+      if (cur === 'dark') next = 'light';
+      else if (cur === 'light') next = null; // cycle back to system
+      else {
+        // following system -> switch to opposite explicit
+        next = systemPrefersDark() ? 'light' : 'dark';
+      }
+      saveTheme(next);
+      applyTheme(next);
+    });
+  }
 }
 
 /* ========== Navigation ========== */
@@ -190,7 +257,7 @@ const PATHS = [
     tag: "Abroad",
     title: "Study Abroad Path",
     desc: "Possible but requires early planning, strong academics, and usually funding.",
-    steps: ["Research countries & requirements 1–2 years ahead", "Improve English (IELTS/TOEFL if needed)", "Track scholarships (government, university, private)", "Prepare a realistic budget and backup local options"]
+    steps: ["Research countries & requirements 1–2 years ahead", "Improve English (IELTS/TOEFL if needed)", "Track scholarships (government, university, private)", "Prepare a realistic budget and timeline"]
   },
   {
     tag: "Local",
@@ -293,7 +360,7 @@ function guideReply(input) {
 
   // User pushing back about profile gate
   if (low.includes("understand") || low.includes("till then") || low.includes("until") || low.includes("without profile") || low.includes("not understand")) {
-    return "I can still help without a full profile. General advice is fine. Filling grade + interests just makes suggestions more relevant to you. Ask me anything — start, paths, abroad, exams, whatever.";
+    return "I can still help without a full profile. General advice is fine. Filling grade + interests just makes suggestions more relevant to you. Ask me anything — start, paths, abroad, exams or goals.";
   }
 
   // Study abroad
@@ -302,47 +369,47 @@ function guideReply(input) {
     if (p.finance && p.finance.toLowerCase().includes("significant")) {
       reply += "Since funding looks important for you, treat scholarships as a main track and keep strong local options open. ";
     }
-    reply += "Useful moves: research countries/programs 1–2 years ahead, strengthen English and grades, track scholarship deadlines, and always keep a solid Ethiopia backup. Want to dig into one of those steps?";
+    reply += "Useful moves: research countries/programs 1–2 years ahead, strengthen English and grades, track scholarship deadlines, and always keep a solid Ethiopia backup. Want to dig into one country or scholarships?";
     return reply;
   }
 
   // Grade 11 / 12 / exams
   if (low.includes("grade 11") || low.includes("grade 12") || low.includes("national exam") || low.includes("entrance") || low.includes("matric") || low.includes("placement")) {
-    return "In Grade 11–12 the practical focus is usually: strong subject performance, understanding the national exam and placement system, and narrowing to 2–3 realistic directions (not one perfect answer). Use small experiments and reading to test interest. What feels hardest right now — subjects, pressure, or choosing a field?";
+    return "In Grade 11–12 the practical focus is usually: strong subject performance, understanding the national exam and placement system, and narrowing to 2–3 realistic directions (not one single perfect path).";
   }
 
   // Don’t know / stuck / confused
-  if (low.includes("start") || low.includes("confused") || low.includes("lost") || low.includes("don't know") || low.includes("dont know") || low.includes("stuck") || low.includes("no idea") || low.includes("idk")) {
+  if (low.includes("start") || low.includes("confused") || low.includes("lost") || low.includes("don't know") || low.includes("dont know") || low.includes("stuck") || low.includes("no idea")) {
     if (hasContext) {
       const bits = [];
       if (p.grade) bits.push(`you’re in ${p.grade}`);
       if (p.interests) bits.push(`you’ve mentioned interest in ${p.interests}`);
       if (p.concerns) bits.push(`and you’re unsure about “${p.concerns}”`);
       const ctx = bits.length ? "Given that " + bits.join(", ") + " — " : "";
-      return ctx + "You don’t need the whole future decided. Pick one small next action: browse Path ideas, try a tiny experiment related to something you’re curious about, or add one milestone on the Roadmap. Which of those feels easiest?";
+      return ctx + "You don’t need the whole future decided. Pick one small next action: browse Path ideas, try a tiny experiment related to something you’re curious about, or add one milestone to your roadmap.";
     }
-    return "Totally normal. You don’t need a full plan. A good move is to list 2–3 things you’re even slightly curious about, then check the Path ideas section for overlap. Or just tell me one thing you like or hate about school and we can work from there.";
+    return "Totally normal. You don’t need a full plan. A good move is to list 2–3 things you’re even slightly curious about, then check the Path ideas section for overlap. Or just tell me one subject you like and we’ll start there.";
   }
 
   // Interests / what to study
   if (low.includes("interest") || low.includes("explore") || low.includes("what should i study") || low.includes("which field") || low.includes("what to study") || low.includes("career")) {
     if (p.interests) {
-      return `You mentioned interest in “${p.interests}”. Next useful step: pick one small experiment (short project, conversation with someone in that area, or focused reading). Then notice what you actually enjoyed vs what just sounded good. Want concrete experiment ideas for that interest?`;
+      return `You mentioned interest in “${p.interests}”. Next useful step: pick one small experiment (short project, conversation with someone in that area, or focused reading). Then notice what you enjoy.`;
     }
-    return "Start rough: name 2–3 subjects, activities, or problems you don’t mind spending time on. Then look at Path ideas and see what overlaps. You can also just tell me one thing you like doing and I’ll help you think from there.";
+    return "Start rough: name 2–3 subjects, activities, or problems you don’t mind spending time on. Then look at Path ideas and see what overlaps. You can also just tell me one thing you like and I'll suggest a small test.";
   }
 
   // Money / scholarships
   if (low.includes("money") || low.includes("financial") || low.includes("scholarship") || low.includes("afford") || low.includes("cost") || low.includes("fee") || low.includes("expensive")) {
-    return "Money is a real constraint for a lot of students. Treat it as information, not a dead end. Practical angles: public universities in Ethiopia, early scholarship research (local + international), building skills that increase options later, and avoiding the assumption that only one expensive path exists. Want low-cost next steps tied to a specific interest?";
+    return "Money is a real constraint for a lot of students. Treat it as information, not a dead end. Practical angles: public universities in Ethiopia, early scholarship research (local + international), and short-term skills you can develop with free resources.";
   }
 
   // Goals / plan / roadmap
   if (low.includes("goal") || low.includes("plan") || low.includes("roadmap") || low.includes("next step") || low.includes("what next")) {
     if (p.goal) {
-      return `Your current stated goal is “${p.goal}”. Treat it as a working hypothesis, not a permanent contract. Break it into stages (Explore → Develop → Prepare → Next). You can add those as milestones on the Roadmap page. Which part of that goal feels most uncertain?`;
+      return `Your current stated goal is “${p.goal}”. Treat it as a working hypothesis, not a permanent contract. Break it into stages (Explore → Develop → Prepare → Next). You can add milestones and adjust them as you learn.`;
     }
-    return "A useful plan is usually smaller than people think. Try: one direction to explore this month, one skill or subject to strengthen, and one concrete information gap to close (requirements, costs, or what the work is actually like). Want help turning that into a simple roadmap?";
+    return "A useful plan is usually smaller than people think. Try: one direction to explore this month, one skill or subject to strengthen, and one concrete information gap to close (requirements, costs, or deadlines).";
   }
 
   // Strengths
@@ -350,7 +417,7 @@ function guideReply(input) {
     if (p.strengths) {
       return `You listed strengths around: ${p.strengths}. Useful question: which of those do you actually enjoy using, not just perform okay at? Enjoyment + ability is a better signal than ability alone.`;
     }
-    return "List 3–5 things you do better than average or that people ask you for help with. Then notice which ones give you energy. That mix is more useful than a generic “what should I become” question.";
+    return "List 3–5 things you do better than average or that people ask you for help with. Then notice which ones give you energy. That mix is more useful than a generic “what should I become”.";
   }
 
   // Profile / about me
@@ -375,12 +442,12 @@ function guideReply(input) {
 
   // Fallback — still try to be useful and human
   if (name) {
-    return `Got it, ${name}. I can work with that. Tell me a bit more about what you’re trying to figure out (a field, a worry, a decision, or even “I’m just stuck”) and I’ll help you think through a next step.`;
+    return `Got it, ${name}. I can work with that. Tell me a bit more about what you’re trying to figure out (a field, a worry, a decision, or even “I’m just stuck”) and I’ll help you think it through.`;
   }
   if (hasContext && p.interests) {
-    return `Okay. Given your interest in ${p.interests}, the useful move is usually to test it with a small action rather than only thinking about it. Want ideas for a quick experiment, or do you want to talk about a specific worry?`;
+    return `Okay. Given your interest in ${p.interests}, the useful move is usually to test it with a small action rather than only thinking about it. Want ideas for a quick experiment, or do you want to update your profile?`;
   }
-  return "I’m with you. Give me a bit more to work with — a subject you like, something that worries you, a path you’re considering, or just “help me start” — and I’ll respond from there. No need for a perfect question.";
+  return "I’m with you. Give me a bit more to work with — a subject you like, something that worries you, a path you’re considering, or just “help me start” — and I’ll respond from there.";
 }
 
 qs("#chat-form").onsubmit = e => {
@@ -401,4 +468,5 @@ qsa("[data-prompt]").forEach(b => {
 });
 
 /* Init */
+initTheme();
 renderAll();

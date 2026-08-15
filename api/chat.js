@@ -30,7 +30,7 @@ export default async function handler(req, res) {
   }));
 
   try {
-    const model = "gemini-flash-latest"; // alias that always points to Google's current recommended Flash model
+    const model = "gemini-flash-lite-latest"; // lighter model — often has more free-tier headroom than standard Flash
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
     const body = JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },

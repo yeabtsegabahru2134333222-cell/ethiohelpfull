@@ -263,8 +263,11 @@ qs("#experiment-form").onsubmit = e => {
   save();
 };
 
-/* ========== Smarter local AI guide ========== */
+/* ========== AI guide (Claude-powered, via /api/chat) ========== */
 const messagesEl = qs("#messages");
+
+// Conversation history for this browser session (kept in memory, not persisted).
+let chatHistory = [];
 
 function addMessage(text, who = "ai") {
   const div = document.createElement("div");
@@ -272,8 +275,40 @@ function addMessage(text, who = "ai") {
   div.textContent = text;
   messagesEl.appendChild(div);
   messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
 }
 
+async function getAIReply(text) {
+  const typingBubble = addMessage("…", "ai");
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        profile: state.profile,
+        history: chatHistory
+      })
+    });
+
+    if (!res.ok) throw new Error("Request failed: " + res.status);
+
+    const data = await res.json();
+    if (!data.reply) throw new Error("No reply in response");
+
+    typingBubble.textContent = data.reply;
+
+    chatHistory.push({ role: "user", content: text });
+    chatHistory.push({ role: "assistant", content: data.reply });
+    if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+  } catch (err) {
+    console.error("AI request failed, falling back to local guide:", err);
+    typingBubble.textContent = guideReply(text);
+  }
+}
+
+// Local rule-based fallback — only used if the AI backend is unreachable
+// (e.g. no internet, API key missing, or Vercel function not deployed yet).
 function guideReply(input) {
   const p = state.profile;
   const low = input.toLowerCase().trim();
@@ -390,7 +425,7 @@ qs("#chat-form").onsubmit = e => {
   if (!text) return;
   addMessage(text, "user");
   input.value = "";
-  setTimeout(() => addMessage(guideReply(text)), 400);
+  getAIReply(text);
 };
 
 qsa("[data-prompt]").forEach(b => {

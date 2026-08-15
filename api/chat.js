@@ -30,7 +30,7 @@ export default async function handler(req, res) {
   }));
 
   try {
-    const model = "gemini-2.5-flash"; // free-tier model, good balance of quality and speed
+    const model = "gemini-flash-latest"; // alias that always points to Google's current recommended Flash model
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {

@@ -31,30 +31,47 @@ export default async function handler(req, res) {
 
   try {
     const model = "gemini-flash-latest"; // alias that always points to Google's current recommended Flash model
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+    const body = JSON.stringify({
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      contents: [
+        ...geminiHistory,
+        { role: "user", parts: [{ text: message }] }
+      ],
+      generationConfig: {
+        maxOutputTokens: 600,
+        temperature: 0.8
+      }
+    });
+
+    // The free tier occasionally returns 429 (rate limited) or 503 (model
+    // temporarily overloaded). Both are transient — retry a couple of times
+    // with a short delay before giving up, instead of failing immediately.
+    const maxAttempts = 3;
+    let data, response;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemPrompt }] },
-          contents: [
-            ...geminiHistory,
-            { role: "user", parts: [{ text: message }] }
-          ],
-          generationConfig: {
-            maxOutputTokens: 600,
-            temperature: 0.8
-          }
-        })
+        body
+      });
+
+      data = await response.json();
+
+      if (response.ok) break;
+
+      const status = data?.error?.code;
+      const isTransient = status === 429 || status === 503;
+      const isLastAttempt = attempt === maxAttempts;
+
+      if (!isTransient || isLastAttempt) {
+        console.error("Gemini API error:", data);
+        return res.status(502).json({ error: "AI service error" });
       }
-    );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error("Gemini API error:", data);
-      return res.status(502).json({ error: "AI service error" });
+      // Wait before retrying: 500ms, then 1000ms
+      await new Promise(r => setTimeout(r, 500 * attempt));
     }
 
     const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;

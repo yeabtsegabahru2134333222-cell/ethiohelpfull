@@ -659,7 +659,9 @@ a { color: inherit; }
 .chat {
   display: flex;
   flex-direction: column;
-  height: 580px;
+  height: 78vh;
+  min-height: 480px;
+  max-height: 760px;
   overflow: hidden;
 }
 
@@ -700,6 +702,7 @@ a { color: inherit; }
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  scroll-behavior: smooth;
   padding: 18px;
   display: flex;
   flex-direction: column;

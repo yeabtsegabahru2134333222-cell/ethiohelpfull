@@ -1,6 +1,6 @@
 # Ethiohelpful — Project Data
 
-> Yep. Based **only on what you've told me**, here's the structured project data for **Ethiohelpful**. I'm separating your actual decisions from things you haven't decided yet so we don't accidentally invent your idea.
+
 
 ### 🎯 Core purpose
 

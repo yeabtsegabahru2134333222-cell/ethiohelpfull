@@ -279,7 +279,7 @@ Students should have control over their stored information.
 
 **Free for students.**
 
-You don't intend to charge them.
+I don't intend to charge my clients.
 
 ---
 

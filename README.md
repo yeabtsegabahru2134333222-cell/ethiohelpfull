@@ -283,28 +283,20 @@ You don't intend to charge them.
 
 ---
 
-# 🎓 Your purpose
+# 🎓 My purpose
 
-Your personal goal for the project is straightforward:
+My personal goal for the project is straightforward:
 
-> **Build a substantial extracurricular that you can genuinely include in your college applications.**
+> **Build a substantial extracurricular that so i can genuinely include it my college applications.**
 
-You aren't claiming you're trying to build the next billion-dollar startup.
-
-If you can eventually publish it publicly and have students use it, great.
-
-But the primary objective is **building a meaningful project that demonstrates initiative, problem-solving, research, and technical work.**
-
----
 
 ## The simplest description of Ethiohelpful
 
-If someone asked you:
+If someone asked me:
 
 > **"What is Ethiohelpful?"**
 
-I'd describe your current idea as:
+I'd describe my idea as:
 
 > **Ethiohelpful is a free platform designed to help confused Ethiopian high-school students find direction. Students provide information about their interests, circumstances, goals, and preferences, and an AI guide uses that information to suggest realistic pathways, explain its reasoning, provide honest reality checks, and build a long-term roadmap—while leaving the final decisions to the student.**
 
-That's the **actual idea you've developed so far**, without me adding a bunch of features you never asked for.
